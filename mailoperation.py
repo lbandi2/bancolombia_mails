@@ -5,19 +5,18 @@ from secrets import json_secret
 
 ACCOUNTS = json_secret('accounts')
 
-class Operation:
+class MailOperation:
     operations = {
         "informa pago Factura Programada": "expense",
         "informa Compra por": "expense",
         "informa que": "income"
     }
 
-    def __init__(self, email_body, date, time):
+    def __init__(self, email_body, date):
         self.email_body = email_body
         self.date = date
-        self.time = time
         self.soup = BeautifulSoup(self.email_body, "html.parser")
-        self.operation = self.generate_output(self.date, self.time)
+        self.operation = self.generate_output(self.date)
 
     def is_valid(self):
         if self.op_type() is not None:
@@ -25,14 +24,13 @@ class Operation:
                 if self.op_account() is not None:
                     if self.op_amount() is not None:
                         return True
-        print(f"Skipping mail from {self.date} @ {self.time} because it's not an operation")
+        print(f"Skipping mail from {self.date} because it's not an operation")
         return False
 
-    def generate_output(self, date, time):
+    def generate_output(self, date):
         if self.is_valid():
             operation = {}
             operation['date'] = date
-            operation['time'] = time
             operation['account'] = self.op_account()
             operation['type'] = self.op_type()
             operation['amount'] = convert_money(self.op_amount())
@@ -96,7 +94,10 @@ class Operation:
         money = None
         for item in tables:
             if re.search("0180*931987", item.text):
-                money = re.search("(?:[$])(?:\d+(?:[.,]?\d*)*)", item.text).group()
+                try:
+                    money = re.search("(?:[$])(?:\d+(?:[.,]?\d*)*)", item.text).group()
+                except AttributeError:
+                    return None
         if money is None:
             print(f"Operation amount {money} could not be found using phone number as reference")
             return None

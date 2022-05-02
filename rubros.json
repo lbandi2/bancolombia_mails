@@ -1,0 +1,38 @@
+{
+    "auto" : [
+        "parking",
+        "petrobras",
+        "combustible",
+        "eds",
+        "primax",
+        "combuscol"
+    ],
+    "mercado" : [
+        "exito",
+        "pricesmart",
+        "carulla"
+    ],
+    "servicios" : [
+        "1password",
+        "algoexpert"
+    ],
+    "online" : [
+        "amzn",
+        "amazon",
+        "aliexpress",
+        "payu",
+        "mercadopago"
+    ],
+    "games" : [
+        "steam",
+        "epic games",
+        "gog"
+    ],
+    "mascotas" : [
+        "kanu"
+    ],
+    "hogar" : [
+        "homecenter",
+        "panamericana"
+    ]    
+}

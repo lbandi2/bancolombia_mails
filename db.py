@@ -34,6 +34,10 @@ class DB:
         doc = self.client_table.find({"date": date})
         return doc
 
+    def find_dates(self, start, end):
+        doc = self.client_table.find({'date': {'$lt': end, '$gte': start}})
+        return list(doc)
+
     def count(self, date):
         doc = self.client_table.count_documents({"date": date})
         return doc

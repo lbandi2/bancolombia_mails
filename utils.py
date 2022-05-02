@@ -1,7 +1,9 @@
 from datetime import datetime
 from dateutil import tz
 import locale
+import json
 import re
+import glob
 import os
 
 def dir_exist(path):
@@ -35,8 +37,12 @@ def utc_to_local(utc_datetime):
 def convert_date(string):
     if ' (' in string:
         string = string.split(' (')[0]
-    date = datetime.strptime(string, '%a, %d %b %Y %H:%M:%S %z')
-    tz_date = utc_to_local(date)
+    try:
+        date = datetime.strptime(string, '%a, %d %b %Y %H:%M:%S %z')
+        tz_date = utc_to_local(date)
+    except ValueError:
+        date = datetime.strptime(string, '%d %b %Y %H:%M:%S %z')
+        tz_date = utc_to_local(date)
     return tz_date
 
 def convert_money(string):
@@ -65,3 +71,26 @@ def regexp_in_list(source, items_list, index=1):
                 if re.search(item, match.text, re.IGNORECASE):
                     return match
     return None
+
+def is_num(string):
+    try:
+        string = string.replace(',', '').replace('.', '').replace('00-', '00')
+        if string.isdigit():
+            return True
+    except AttributeError:
+        return False
+    else:
+        return False
+
+def get_rubro(string):
+    with open("rubros.json", "r") as json_file:
+        content = json.load(json_file)    
+    for key, values in content.items():
+        for value in values:
+            if value in string:
+                return key
+
+def last_pdf():
+    list_of_files = glob.glob('./data/*.pdf') # * means all if need specific format then *.csv
+    latest_file = max(list_of_files, key=os.path.getctime)
+    return latest_file
