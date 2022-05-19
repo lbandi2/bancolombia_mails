@@ -1,12 +1,14 @@
 from pymongo import MongoClient
-from datetime import datetime
 import json
-from secrets import json_secret
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class DB:
-    DB_HOST = json_secret('db', 'host')
-    DB = json_secret('db', 'db')
-    DB_TABLE = json_secret('db', 'db_table')
+    DB_HOST = os.getenv('DB_HOST')
+    DB = os.getenv('DB')
+    DB_TABLE = os.getenv('DB_TABLE')
 
     def __init__(self, host=DB_HOST, db=DB, table=DB_TABLE):
         self.host = host

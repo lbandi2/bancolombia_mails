@@ -52,11 +52,23 @@ class Search:
             userId='me', id=msg['id'],
             body={'removeLabelIds': ['UNREAD']}).execute()
 
+    # def search_messages(self, query):
+    #     result = self.service.users().messages().list(maxResults=300, userId='me', q=query).execute()
+    #     messages = []
+    #     if 'messages' in result:
+    #         messages.extend(result['messages'])
+    #     return messages
+
     def search_messages(self, query):
-        result = self.service.users().messages().list(maxResults=300, userId='me', q=query).execute()
+        result = self.service.users().messages().list(maxResults=500, userId='me', q=query).execute()
         messages = []
         if 'messages' in result:
             messages.extend(result['messages'])
+        while 'nextPageToken' in result:
+            page_token = result['nextPageToken']
+            result = self.service.users().messages().list(userId='me',q=query, pageToken=page_token).execute()
+            if 'messages' in result:
+                messages.extend(result['messages'])
         return messages
 
     def fetch_message(self, message):

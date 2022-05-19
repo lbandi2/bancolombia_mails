@@ -1,9 +1,9 @@
 from bs4 import BeautifulSoup
 import re
 from utils import regexp_in_list, convert_money
-from secrets import json_secret
+from dotenv import dotenv_values
 
-ACCOUNTS = json_secret('accounts')
+ACCOUNTS = dotenv_values('accounts.env')
 
 class MailOperation:
     operations = {
