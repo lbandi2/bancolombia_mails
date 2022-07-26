@@ -5,6 +5,7 @@ import json
 import re
 import glob
 import os
+import csv
 
 def dir_exist(path):
     return os.path.isdir(path)
@@ -17,6 +18,15 @@ def make_dir(path):
             print (f"Failed to create directory '{path}'")
         else:
             print(f"Creating folder '{path}'..")
+
+def read_csv(file):
+    with open(file, 'r') as csv_file:
+        return list(csv.reader(csv_file, skipinitialspace=True))[1:]
+
+def string_to_datetime(string):
+    if type(string) is str:
+        return datetime.strptime(string, '%Y-%m-%dT%H:%M:%S%z').replace(tzinfo=None)
+    return string
 
 def get_size_format(b, factor=1024, suffix="B"):
     """

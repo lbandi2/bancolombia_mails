@@ -1,7 +1,7 @@
 from gmail_setup import gmail_authenticate
 from emails import Email
 from mailoperation import MailOperation
-from db import DB
+from db_sql import DB
 
 class Search:
     def __init__(self, query, stop_if_unread=False, ignore_subject=[], force_get_attachment=False):
