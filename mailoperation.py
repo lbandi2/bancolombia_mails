@@ -30,7 +30,7 @@ class MailOperation:
     def generate_output(self, date):
         if self.is_valid():
             operation = {}
-            operation['date'] = date
+            operation['datetime'] = date
             operation['account'] = self.op_account()
             operation['type'] = self.op_type()
             operation['amount'] = convert_money(self.op_amount())
