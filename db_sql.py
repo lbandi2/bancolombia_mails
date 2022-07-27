@@ -2,7 +2,7 @@ from mysql.connector import connect, Error
 import os
 from dotenv import load_dotenv
 
-from utils import string_to_datetime
+from utils import string_to_datetime, get_category
 
 load_dotenv()
 
@@ -60,6 +60,23 @@ class DB:
         records = self.connect('fetch', query)
         return records
 
+    def update_category(self, item, category):
+        query = f"UPDATE {self.table} SET category = '{category}' WHERE id = {item[0]}"
+        self.connect('execute', query)
+
+    def fix_categories(self, force=False):
+        for item in self.all_records():
+            category = None
+            if item[3] == 'extraction' and (item[6] is None or item[6] == 'unknown'):
+                category = 'extraccion'
+                # print(f"[MySQL] Updating category for entry {item[1]} {item[5].upper()}: {category}")
+                # self.update_category(item, category)
+            elif item[6] is None or item[6] == 'unknown' or force:
+                category = get_category(item[5])
+            if category is not None:
+                print(f"[MySQL] Updating category for entry {item[1]} {item[5].upper()}: {category}")
+                self.update_category(item, category)
+
     def find_date(self, date):
         query = f"SELECT * FROM {self.table} WHERE datetime LIKE '{date}%'"
         records = self.connect('fetch', query)
@@ -87,8 +104,8 @@ class DB:
         records = []
         query = f"""
         INSERT INTO {self.table}
-        (datetime, account, type, amount, entity)
-        VALUES ( %s, %s, %s, %s, %s )"""
+        (datetime, account, type, amount, entity, category)
+        VALUES ( %s, %s, %s, %s, %s, %s )"""
 
         if type(items) is list:
             for entry in items:
@@ -104,7 +121,8 @@ class DB:
                 items["account"],
                 items["type"],
                 items["amount"],
-                items["entity"]
+                items["entity"],
+                items["category"]
                 ],
 
         self.connect('execute_many', query, records)

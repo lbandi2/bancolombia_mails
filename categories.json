@@ -1,0 +1,81 @@
+{
+    "auto" : [
+        "parking",
+        "petrobras",
+        "combustible",
+        "eds",
+        "primax",
+        "combuscol",
+        "stacionamiento",
+        "mobil ",
+        "stacion d servicio",
+        "service stat"
+    ],
+    "mascotas" : [
+        "kanu"
+    ],
+    "mercado" : [
+        "xito",
+        "pricesmart",
+        "price smart",
+        "carulla",
+        "farmatodo",
+        "alkosto",
+        "fit market",
+        "fit prote",
+        "makro"
+    ],
+    "servicios" : [
+        "1password",
+        "algoexpert",
+        "home assistant cloud",
+        "mp de telecomunicac",
+        "servicios etb",
+        "hogaru",
+        "ha cloud",
+        "plex",
+        "enel  ref"
+    ],
+    "transporte" : [
+        "taxi",
+        "cabify",
+        "viajes imperial"
+    ],
+    "online" : [
+        "amzn",
+        "amazon",
+        "aliexpress",
+        "payu",
+        "mercadopago"
+    ],
+    "games" : [
+        "steam",
+        "epic games",
+        "gog"
+    ],
+    "hogar" : [
+        "homecenter",
+        "panamericana",
+        "k tronix"
+    ],
+    "viajes" : [
+        "hotel"
+    ],
+    "medicina" : [
+        "clinica",
+        "dental",
+        "colsanitas"
+    ],
+    "belleza" : [
+        "barberia",
+        "morris omeara"
+    ],
+    "shopping" : [
+        "palatino",
+        "santaf",
+        "parque la col"
+    ],
+    "pagos" : [
+        "marina medero"
+    ]
+}
