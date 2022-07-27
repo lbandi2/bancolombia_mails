@@ -59,7 +59,6 @@ class MailOperation:
                         text_w_timedate = text_w_money.split(money)[1]
                         time = re.search("\d{2}\:\d{2}", text_w_timedate).group()
                         string = text_w_timedate.split(time)[0].strip('en ').lstrip().replace('. hora', '')
-                        print(string)
                 elif op_type == 'expense':
                     text_w_money = item.text.lower().split(operation_string)[1]
                     if re.search("\d{2}\:\d{2}", text_w_money):                      # compras habituales
