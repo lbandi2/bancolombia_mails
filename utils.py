@@ -92,13 +92,14 @@ def is_num(string):
     else:
         return False
 
-def get_rubro(string):
-    with open("rubros.json", "r") as json_file:
+def get_category(string):
+    with open("categories.json", "r") as json_file:
         content = json.load(json_file)    
     for key, values in content.items():
         for value in values:
-            if value in string:
+            if value in string.lower():
                 return key
+    return None
 
 def last_pdf():
     list_of_files = glob.glob('./data/*.pdf') # * means all if need specific format then *.csv

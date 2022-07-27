@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 import re
-from utils import regexp_in_list, convert_money
+from utils import regexp_in_list, convert_money, get_category
 from dotenv import dotenv_values
 
 ACCOUNTS = dotenv_values('accounts.env')
@@ -9,6 +9,7 @@ class MailOperation:
     operations = {
         "informa pago Factura Programada": "expense",
         "informa Compra por": "expense",
+        "informa Retiro por": "extraction",
         "informa que": "income"
     }
 
@@ -35,6 +36,10 @@ class MailOperation:
             operation['type'] = self.op_type()
             operation['amount'] = convert_money(self.op_amount())
             operation['entity'] = self.op_entity()
+            if get_category(self.op_entity()) is not None:
+                operation['category'] = get_category(self.op_entity())
+            else:
+                operation['category'] = 'unknown'
             return operation
 
     def op_entity(self):
@@ -48,6 +53,13 @@ class MailOperation:
                 if op_type == 'income':                                              # pago de tarjeta
                     text_w_money = item.text.lower().split(operation_string)[1]
                     string = text_w_money.split('realizo abono')[0].strip()
+                elif op_type == 'extraction':
+                    text_w_money = item.text.lower().split(operation_string)[1]
+                    if re.search("\d{2}\:\d{2}", text_w_money):                      # extracciones
+                        text_w_timedate = text_w_money.split(money)[1]
+                        time = re.search("\d{2}\:\d{2}", text_w_timedate).group()
+                        string = text_w_timedate.split(time)[0].strip('en ').lstrip().replace('. hora', '')
+                        print(string)
                 elif op_type == 'expense':
                     text_w_money = item.text.lower().split(operation_string)[1]
                     if re.search("\d{2}\:\d{2}", text_w_money):                      # compras habituales
