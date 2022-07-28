@@ -35,7 +35,6 @@ class MailOperation:
             operation['datetime'] = date
             operation['account'] = self.op_account()
             operation['type'] = self.op_type()
-            print(self.op_amount())
             operation['amount'] = convert_money(self.op_amount())
             operation['entity'] = self.op_entity()
             if get_category(self.op_entity()) is not None:
