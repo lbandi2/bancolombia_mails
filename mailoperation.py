@@ -7,10 +7,11 @@ ACCOUNTS = dotenv_values('accounts.env')
 
 class MailOperation:
     operations = {
-        "informa pago Factura Programada": "expense",
+        "informa pago Factura Programada": "recurring bill",
+        "le informa Pago por": "expense",
         "informa Compra por": "expense",
         "informa Retiro por": "extraction",
-        "informa que": "payment"
+        "informa que": "manual payment"
     }
 
     def __init__(self, email_body, date):
@@ -34,6 +35,7 @@ class MailOperation:
             operation['datetime'] = date
             operation['account'] = self.op_account()
             operation['type'] = self.op_type()
+            print(self.op_amount())
             operation['amount'] = convert_money(self.op_amount())
             operation['entity'] = self.op_entity()
             if get_category(self.op_entity()) is not None:
@@ -50,22 +52,28 @@ class MailOperation:
         money = self.op_amount()
         for item in tables:
             if re.search("0180*931987", item.text):
-                if op_type == 'payment':                                              # pago de tarjeta
+                if op_type == 'manual payment':                                      # pago manual
                     text_w_money = item.text.lower().split(operation_string)[1]
                     string = text_w_money.split('realizo abono')[0].strip()
-                elif op_type == 'extraction':
+                elif op_type == 'extraction':                                        # extracciones
                     text_w_money = item.text.lower().split(operation_string)[1]
-                    if re.search("\d{2}\:\d{2}", text_w_money):                      # extracciones
+                    if re.search("\d{2}\:\d{2}", text_w_money):
                         text_w_timedate = text_w_money.split(money)[1]
                         time = re.search("\d{2}\:\d{2}", text_w_timedate).group()
                         string = text_w_timedate.split(time)[0].strip('en ').lstrip().replace('. hora', '')
-                elif op_type == 'expense':
+                elif op_type == 'expense':                                          
                     text_w_money = item.text.lower().split(operation_string)[1]
-                    if re.search("\d{2}\:\d{2}", text_w_money):                      # compras habituales
-                        text_w_timedate = text_w_money.split(money)[1]
-                        time = re.search("\d{2}\:\d{2}", text_w_timedate).group()
-                        string = text_w_timedate.split(time)[0].strip('en ').lstrip()
-                    elif re.search("\d{2}/\d{2}/\d{4}", text_w_money):               # debito automatico (no time, only date)
+                    if re.search("\d{2}\:\d{2}", text_w_money):
+                        if 'desde cta' in text_w_money:
+                            text_w_timedate = text_w_money.split(money)[1]         # pagos (a veces son debitos automaticos)
+                            string = text_w_timedate.replace(" a ", "").split(" desde cta")[0]
+                        else:
+                            text_w_timedate = text_w_money.split(money)[1]         # compras habituales
+                            time = re.search("\d{2}\:\d{2}", text_w_timedate).group()
+                            string = text_w_timedate.split(time)[0].strip('en ').lstrip()
+                elif op_type == 'recurring bill':
+                    text_w_money = item.text.lower().split(operation_string)[1]
+                    if re.search("\d{2}/\d{2}/\d{4}", text_w_money):               # debito automatico (no time, only date)
                         text_no_extras = text_w_money.split(money)[0].strip('por ')
                         text_no_extras = text_no_extras.split(' (')[0]
                         string = text_no_extras
@@ -114,4 +122,4 @@ class MailOperation:
             return None
             # raise ValueError(f"Operation amount {money} could not be found using phone number as reference")
         else:
-            return money    
+            return money

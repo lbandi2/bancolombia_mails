@@ -55,13 +55,29 @@ def convert_date(string):
         tz_date = utc_to_local(date)
     return tz_date
 
+# def convert_money(string):
+#     op_amount = 0
+#     try:
+#         if re.search("\$\d*\.\d*(\.\d{2}|)", string):
+#             locale.setlocale(locale.LC_ALL, 'es_CO.UTF8')
+#             op_amount = locale.atof(string.strip('$'))
+#             locale.setlocale(locale.LC_ALL, 'en_US.UTF8')
+#         elif re.search("\$\d*\,\d*(\.\d{2}|)", string):
+#             op_amount = locale.atof(string.strip('$'))
+#     except ValueError:
+#         print(f"Could not convert {string} to money")
+#     finally:
+#         return op_amount
+
 def convert_money(string):
+    op_amount = 0
     try:
-        if re.search("\$\d*\.\d*(\.\d{2}|)", string):
+        if re.search("\$\d*\.\d*(\,\d{2}|)", string):
             locale.setlocale(locale.LC_ALL, 'es_CO.UTF8')
             op_amount = locale.atof(string.strip('$'))
             locale.setlocale(locale.LC_ALL, 'en_US.UTF8')
         elif re.search("\$\d*\,\d*(\.\d{2}|)", string):
+            locale.setlocale(locale.LC_ALL, 'en_US.UTF8')
             op_amount = locale.atof(string.strip('$'))
     except ValueError:
         print(f"Could not convert {string} to money")
