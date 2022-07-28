@@ -10,7 +10,7 @@ class MailOperation:
         "informa pago Factura Programada": "expense",
         "informa Compra por": "expense",
         "informa Retiro por": "extraction",
-        "informa que": "income"
+        "informa que": "payment"
     }
 
     def __init__(self, email_body, date):
@@ -50,7 +50,7 @@ class MailOperation:
         money = self.op_amount()
         for item in tables:
             if re.search("0180*931987", item.text):
-                if op_type == 'income':                                              # pago de tarjeta
+                if op_type == 'payment':                                              # pago de tarjeta
                     text_w_money = item.text.lower().split(operation_string)[1]
                     string = text_w_money.split('realizo abono')[0].strip()
                 elif op_type == 'extraction':
