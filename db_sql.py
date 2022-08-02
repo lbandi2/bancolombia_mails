@@ -11,17 +11,23 @@ class DB:
     DB_USER = os.getenv('DBSQL_USER')
     DB_PASSWORD = os.getenv('DBSQL_PASSWORD')
     DB = os.getenv('DBSQL')
-    DB_TABLE = os.getenv('DBSQL_TABLE')
+    DB_TABLE_OP_ACCOUNT = os.getenv('DBSQL_TABLE_OP_ACCOUNT')
+    DB_TABLE_OP_CARD = os.getenv('DBSQL_TABLE_OP_CARD')
+    DB_TABLE_CARDS = os.getenv('DBSQL_TABLE_CARDS')
+    DB_TABLE_ACCOUNTS = os.getenv('DBSQL_TABLE_ACCOUNTS')
 
-    def __init__(self, host=DB_HOST, user=DB_USER, password=DB_PASSWORD, db=DB, table=DB_TABLE):
+    def __init__(self, host=DB_HOST, user=DB_USER, password=DB_PASSWORD, db=DB, db_table='card'):
         self.host = host
         self.db = db
         self.user = user
         self.password = password
-        self.table = table
+        if db_table == 'card':
+            self.db_table = self.DB_TABLE_OP_CARD
+        else:
+            self.db_table = self.DB_TABLE_OP_ACCOUNT
         # self.connect()
 
-    def connect(self, db_action='fetch', query='', records=[]):
+    def connect(self, db_action='fetch', query='', records=[], dictionary=True):
 
         config = {
             'user': self.DB_USER,
@@ -32,7 +38,7 @@ class DB:
             }
         try:
             with connect(**config) as connection:
-                with connection.cursor() as cursor:
+                with connection.cursor(dictionary=dictionary) as cursor:
                     if db_action == 'fetch':
                         return self.fetch(cursor, query)
                     elif db_action == 'execute':
@@ -55,38 +61,51 @@ class DB:
         cursor.executemany(query, records)
         connection.commit()
 
+    def all_cards(self, select_field='*'):
+        query = f"SELECT {select_field} FROM {self.DB_TABLE_CARDS}"
+        if select_field == '*':
+            records = self.connect('fetch', query)
+        else:
+            records = sum(self.connect('fetch', query, dictionary=False), ())
+        return records
+
+    def all_accounts(self):
+        query = f"SELECT * FROM {self.DB_TABLE_ACCOUNTS} WHERE is_corporate != 1;"
+        records = self.connect('fetch', query)
+        return records
+
     def all_records(self):
-        query = f"SELECT * FROM {self.table}"
+        query = f"SELECT * FROM {self.db_table}"
         records = self.connect('fetch', query)
         return records
 
     def update_category(self, item, category):
-        query = f"UPDATE {self.table} SET category = '{category}' WHERE id = {item[0]}"
+        query = f"UPDATE {self.db_table} SET category = '{category}' WHERE id = {item['id']}"
         self.connect('execute', query)
 
     def fix_categories(self, force=False):
         for item in self.all_records():
             category = None
-            if item[3] == 'extraction' and (item[6] is None or item[6] == 'unknown'):
+            if item['type'] == 'extraction' and (item['category'] is None or item['category'] == 'unknown'): #TODO: maybe only check type?
                 category = 'extraccion'
                 # print(f"[MySQL] Updating category for entry {item[1]} {item[5].upper()}: {category}")
                 # self.update_category(item, category)
             elif item[6] is None or item[6] == 'unknown' or force:
                 category = get_category(item[5])
             if category is not None:
-                print(f"[MySQL] Updating category for entry {item[1]} {item[5].upper()}: {category}")
+                print(f"[MySQL] Updating category for entry {item['date']} {item['entity'].upper()}: {category}")
                 self.update_category(item, category)
 
     def find_date(self, date):
-        query = f"SELECT * FROM {self.table} WHERE datetime LIKE '{date}%'"
+        query = f"SELECT * FROM {self.db_table} WHERE datetime LIKE '{date}%'"
         records = self.connect('fetch', query)
         return records
 
     def is_in_db(self, item):
         for record in self.all_records():
-            if record[1] == string_to_datetime(item['datetime']):
-                if record[5] == item['entity']:
-                    if record[4] == float(item['amount']):
+            if record['date'] == string_to_datetime(item['datetime']):
+                if record['entity'] == item['entity']:
+                    if record['amount'] == float(item['amount']):
                         return True
         return False
 
@@ -95,22 +114,25 @@ class DB:
             print(f"[MySQL] Added a bunch of entries")
             self.execute_insert(item)
         elif not self.is_in_db(item):
-            print(f"[MySQL] Entry for {item['datetime']} [{item['type']}] - {item['entity'].upper()}: {item['amount']} added")
+            print(f"[MySQL] Entry for {self.db_table} {item['datetime']} [{item['type']}] - {item['entity'].upper()}: {item['amount']} added")
             self.execute_insert(item)
         else:
             print("[MySQL] Entry is already in DB")
 
     def execute_insert(self, items):
         records = []
+        account = 'account_id'
+        if 'card' in self.db_table.lower():
+            account = 'card_id'
         query = f"""
-        INSERT INTO {self.table}
-        (datetime, account, type, amount, entity, category)
+        INSERT INTO {self.db_table}
+        (date, type, amount, entity, {account}, category)
         VALUES ( %s, %s, %s, %s, %s, %s )"""
 
         if type(items) is list:
             for entry in items:
-                entry[0] = string_to_datetime(entry[0])
-                entry[3] = float(entry[3])
+                entry['datetime'] = string_to_datetime(entry['datetime'])
+                entry['amount'] = float(entry['amount'])
                 records.append(entry)
                 print(entry)
         else:
@@ -118,10 +140,10 @@ class DB:
 
             records = [
                 items["datetime"],
-                items["account"],
                 items["type"],
                 items["amount"],
                 items["entity"],
+                items["account"],
                 items["category"]
                 ],
 

@@ -26,16 +26,19 @@
         "makro"
     ],
     "servicios" : [
-        "1password",
-        "algoexpert",
-        "home assistant cloud",
         "mp de telecomunicac",
         "servicios etb",
         "hogaru",
+        "enel ref",
+        "empresa de acueducto",
+        "vanti sa"
+    ],
+    "suscripciones" :[
+        "1password",
+        "algoexpert",
+        "home assistant cloud",
         "ha cloud",
-        "plex",
-        "enel  ref",
-        "empresa de acueducto"
+        "plex"
     ],
     "transporte" : [
         "taxi",
@@ -78,5 +81,8 @@
     ],
     "pagos" : [
         "marina medero"
+    ],
+    "alquiler" : [
+        "19345455728"
     ]
 }

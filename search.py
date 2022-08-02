@@ -52,21 +52,14 @@ class Search:
             userId='me', id=msg['id'],
             body={'removeLabelIds': ['UNREAD']}).execute()
 
-    # def search_messages(self, query):
-    #     result = self.service.users().messages().list(maxResults=300, userId='me', q=query).execute()
-    #     messages = []
-    #     if 'messages' in result:
-    #         messages.extend(result['messages'])
-    #     return messages
-
     def search_messages(self, query):
-        result = self.service.users().messages().list(maxResults=500, userId='me', q=query).execute()
+        result = self.service.users().messages().list(maxResults=500, userId='me', labelIds=['Label_8349830299644933035']).execute()
         messages = []
         if 'messages' in result:
             messages.extend(result['messages'])
         while 'nextPageToken' in result:
             page_token = result['nextPageToken']
-            result = self.service.users().messages().list(userId='me',q=query, pageToken=page_token).execute()
+            result = self.service.users().messages().list(maxResults=500, pageToken=page_token, userId='me', labelIds=['Label_8349830299644933035']).execute()
             if 'messages' in result:
                 messages.extend(result['messages'])
         return messages
@@ -98,44 +91,22 @@ class SearchOperations(Search):
         super().__init__(query, stop_if_unread=True)
         self.operations = self.get_operations()
         self.push_to_db()
-        self.expense_total = self.get_expense_total()
-        self.income_total = self.get_income_total()
-        self.balance = self.get_balance()
-
-    def get_balance(self):
-        return self.expense_total - self.income_total
-
-    def get_expense_total(self):
-        total = 0
-        for item in self.operations:
-            if item['type'] == 'expense' and item['account'] == 'cc sergio':
-                total += item['amount']
-        return float(total)
-
-    def get_income_total(self):
-        total = 0
-        for item in self.operations:
-            if item['type'] == 'income' and item['account'] == 'cc sergio':
-                total += item['amount']
-        return float(total)
 
     def push_to_db(self):
         if self.operations != []:
-            db = DB()
             for operation in self.operations:
-                try:
-                    db.insert(operation)
-                except:
-                    print(f"Error inserting: {operation}")
+                # print(operation)
+                db = DB(db_table=operation['db_table'])
+                # try:
+                db.insert(operation)
+                # except:
+                    # print(f"Error inserting: {operation}")
 
     def get_operations(self):
         operations = []
         for item in self.emails:
             if item.is_unread:
-                # date = item.date.strftime("%Y-%m-%d")
-                # time = item.date.strftime("%H:%M")
                 date = item.date.isoformat()
-                time = item.date.time()
                 operation = MailOperation(item.body, date)
                 if operation.is_valid():
                     operations.append(operation.operation)

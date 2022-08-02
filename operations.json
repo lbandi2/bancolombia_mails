@@ -1,0 +1,21 @@
+{
+    "expense": [
+        "le informa Pago por",
+        "informa Compra por"
+    ],
+    "extraction": [
+        "informa Retiro por"
+    ],
+    "transfer": [
+        "informa Transferencia por"
+    ],
+    "manual payment": [
+        "informa que"
+    ],
+    "recurring bill": [
+        "informa pago Factura Programada"
+    ],
+    "bank payment": [
+        "realizo debito de su cuenta por"
+    ]
+}
