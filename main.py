@@ -15,9 +15,9 @@ def main():
     make_dir("creds")
     search = SearchOperations(GMAIL_LABEL)
 
-# 5 min to download ~ 400 emails
+# 6.5 min to download ~ 400 emails
 # 2 min to process afterwards
-# total: 7 min
+# total: 8.5s min
 
 if __name__ == '__main__':
     main()
