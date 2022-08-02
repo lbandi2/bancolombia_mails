@@ -72,7 +72,7 @@ def convert_date(string):
 def convert_money(string):
     op_amount = 0
     try:
-        if re.search("\$\d*\.\d*(\,\d{2}|)", string):
+        if re.search("\$\d*\.\d*(\,\d{2}|)", string) or ',00' in re.search("\$\d*(\,\d+)", string).groups():
             locale.setlocale(locale.LC_ALL, 'es_CO.UTF8')
             op_amount = locale.atof(string.strip('$'))
             locale.setlocale(locale.LC_ALL, 'en_US.UTF8')
@@ -105,8 +105,18 @@ def is_num(string):
             return True
     except AttributeError:
         return False
-    else:
-        return False
+    return False
+
+def operation_types(file="operations.json"):
+    with open(file, "r") as json_file:
+        content = json.load(json_file)
+    return content
+
+def find_operation(string):
+    for op_k, op_v in operation_types().items():
+        for value in op_v:
+            if value.lower() in string.lower():
+                return op_k
 
 def get_category(string):
     with open("categories.json", "r") as json_file:
