@@ -61,6 +61,11 @@ class DB:
         cursor.executemany(query, records)
         connection.commit()
 
+    def account_from_id(self, account_id):
+        query = f"SELECT * FROM {self.DB_TABLE_ACCOUNTS} WHERE id='{account_id}'"
+        record = self.connect('fetch', query)
+        return record[0]
+
     def all_cards(self, select_field='*'):
         query = f"SELECT {select_field} FROM {self.DB_TABLE_CARDS}"
         if select_field == '*':

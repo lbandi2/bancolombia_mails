@@ -11,8 +11,13 @@
         "stacion d servicio",
         "service stat"
     ],
+    "farmacia" : [
+        "cruz verde",
+        "la rebaja"
+    ],
     "mascotas" : [
-        "kanu"
+        "kanu",
+        "veterinaria"
     ],
     "mercado" : [
         "xito",
@@ -72,12 +77,14 @@
     ],
     "belleza" : [
         "barberia",
-        "morris omeara"
+        "morris omeara",
+        "il salone"
     ],
     "shopping" : [
         "palatino",
         "santaf",
-        "parque la col"
+        "parque la col",
+        "unicentro"
     ],
     "pagos" : [
         "marina medero"
