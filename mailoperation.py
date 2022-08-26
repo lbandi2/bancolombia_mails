@@ -176,5 +176,6 @@ class MailOperation:
                 operation['category'] = get_category(self.op_entity())
             else:
                 operation['category'] = ''
+            operation['dues'] = 1
             return operation
 

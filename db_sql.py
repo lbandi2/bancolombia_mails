@@ -131,8 +131,8 @@ class DB:
             account = 'card_id'
         query = f"""
         INSERT INTO {self.db_table}
-        (date, type, amount, entity, {account}, category)
-        VALUES ( %s, %s, %s, %s, %s, %s )"""
+        (date, type, amount, entity, {account}, category, dues)
+        VALUES ( %s, %s, %s, %s, %s, %s, %s )"""
 
         if type(items) is list:
             for entry in items:
@@ -149,7 +149,8 @@ class DB:
                 items["amount"],
                 items["entity"],
                 items["account"],
-                items["category"]
+                items["category"],
+                items["dues"]
                 ],
 
         self.connect('execute_many', query, records)
