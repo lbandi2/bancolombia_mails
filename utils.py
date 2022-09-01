@@ -7,6 +7,7 @@ import glob
 import os
 import csv
 
+
 def dir_exist(path):
     return os.path.isdir(path)
 
@@ -126,6 +127,16 @@ def get_category(string):
             if value in string.lower():
                 return key
     return None
+
+def find_category_in_db(entity, db):
+    if get_category(entity) is not None:
+        category = get_category(entity)
+        db_categs = db
+        for record in db_categs:
+            if category == record['name']:
+                return record['id']
+    else:
+        return None
 
 def last_pdf():
     list_of_files = glob.glob('./data/*.pdf') # * means all if need specific format then *.csv
