@@ -13,6 +13,7 @@ class DB:
     DB = os.getenv('DBSQL')
     DB_TABLE_OP_ACCOUNT = os.getenv('DBSQL_TABLE_OP_ACCOUNT')
     DB_TABLE_OP_CARD = os.getenv('DBSQL_TABLE_OP_CARD')
+    DB_TABLE_OP_CATEGORIES = os.getenv('DBSQL_TABLE_OP_CATEGORIES')
     DB_TABLE_CARDS = os.getenv('DBSQL_TABLE_CARDS')
     DB_TABLE_ACCOUNTS = os.getenv('DBSQL_TABLE_ACCOUNTS')
 
@@ -23,6 +24,8 @@ class DB:
         self.password = password
         if db_table == 'card':
             self.db_table = self.DB_TABLE_OP_CARD
+        elif db_table == 'categories':
+            self.db_table = self.DB_TABLE_OP_CATEGORIES
         else:
             self.db_table = self.DB_TABLE_OP_ACCOUNT
         # self.connect()
@@ -131,7 +134,7 @@ class DB:
             account = 'card_id'
         query = f"""
         INSERT INTO {self.db_table}
-        (date, type, amount, entity, {account}, category, dues)
+        (date, type, amount, entity, {account}, category_id, dues)
         VALUES ( %s, %s, %s, %s, %s, %s, %s )"""
 
         if type(items) is list:

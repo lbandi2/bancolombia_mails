@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 import re
-from utils import regexp_in_list, convert_money, operation_types, get_category
+from utils import regexp_in_list, convert_money, operation_types, get_category, find_category_in_db
 from db_sql import DB
 from dotenv import dotenv_values
 
@@ -161,6 +161,16 @@ class MailOperation:
                 entity = entity.title()
         return entity
 
+    # def find_category_in_db(self, entity, db):
+    #     if get_category(entity) is not None:
+    #         category = get_category(entity)
+    #         db_categs = db
+    #         for record in db_categs:
+    #             if category == record['name']:
+    #                 return record['id']
+    #     else:
+    #         return None
+
     def generate_output(self, date):
         if self.is_valid():
             operation = {}
@@ -172,10 +182,11 @@ class MailOperation:
                 operation['account'] = self.op_account()['account_id']  # gets bank account id
             operation['amount'] = convert_money(self.op_amount())
             operation['entity'] = self.op_entity()
-            if get_category(self.op_entity()) is not None:
-                operation['category'] = get_category(self.op_entity())
-            else:
-                operation['category'] = ''
+            # if get_category(self.op_entity()) is not None:
+            #     operation['category'] = get_category(self.op_entity())
+            # else:
+            #     operation['category'] = ''
+            operation['category'] = find_category_in_db(self.op_entity(), db=DB(db_table='categories').all_records())
             operation['dues'] = 1
             return operation
 

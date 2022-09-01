@@ -67,7 +67,8 @@
     "hogar" : [
         "homecenter",
         "panamericana",
-        "k tronix"
+        "k tronix",
+        "home sentry"
     ],
     "viajes" : [
         "hotel"
@@ -93,5 +94,9 @@
     ],
     "alquiler" : [
         "19345455728"
+    ],
+    "pago de tarjeta" : [
+        "t.cred ",
+        "t.cred*"
     ]
 }
