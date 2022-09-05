@@ -6,27 +6,20 @@
         "eds",
         "primax",
         "combuscol",
-        "stacionamiento",
+        "estacionamiento",
         "mobil ",
-        "stacion d servicio",
+        "estacion d servicio",
         "service stat"
-    ],
-    "farmacia" : [
-        "cruz verde",
-        "la rebaja",
-        "locatel",
-        "farma"
     ],
     "mascotas" : [
         "kanu",
         "veterinaria"
     ],
     "mercado" : [
-        "xito",
+        "exito",
         "pricesmart",
         "price smart",
         "carulla",
-        "farmatodo",
         "alkosto",
         "fit market",
         "fit prote",
@@ -52,13 +45,6 @@
         "cabify",
         "viajes imperial"
     ],
-    "online" : [
-        "amzn",
-        "amazon",
-        "aliexpress",
-        "payu",
-        "mercadopago"
-    ],
     "games" : [
         "steam",
         "epic games",
@@ -70,24 +56,22 @@
         "k tronix",
         "home sentry"
     ],
-    "viajes" : [
+    "alojamiento" : [
         "hotel"
     ],
     "medicina" : [
         "clinica",
         "dental",
-        "colsanitas"
+        "colsanitas",
+        "cruz verde",
+        "la rebaja",
+        "locatel",
+        "farma"
     ],
     "belleza" : [
         "barberia",
         "morris omeara",
         "il salone"
-    ],
-    "shopping" : [
-        "palatino",
-        "santaf",
-        "parque la col",
-        "unicentro"
     ],
     "pagos" : [
         "marina medero"
