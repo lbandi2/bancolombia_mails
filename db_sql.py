@@ -91,19 +91,6 @@ class DB:
         query = f"UPDATE {self.db_table} SET category = '{category}' WHERE id = {item['id']}"
         self.connect('execute', query)
 
-    def fix_categories(self, force=False):
-        for item in self.all_records():
-            category = None
-            if item['type'] == 'extraction' and (item['category'] is None or item['category'] == 'unknown'): #TODO: maybe only check type?
-                category = 'extraccion'
-                # print(f"[MySQL] Updating category for entry {item[1]} {item[5].upper()}: {category}")
-                # self.update_category(item, category)
-            elif item[6] is None or item[6] == 'unknown' or force:
-                category = get_category(item[5])
-            if category is not None:
-                print(f"[MySQL] Updating category for entry {item['date']} {item['entity'].upper()}: {category}")
-                self.update_category(item, category)
-
     def find_date(self, date):
         query = f"SELECT * FROM {self.db_table} WHERE datetime LIKE '{date}%'"
         records = self.connect('fetch', query)

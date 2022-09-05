@@ -129,14 +129,16 @@ def get_category(string):
     return None
 
 def find_category_in_db(entity, db):
-    if get_category(entity) is not None:
+    if get_category(entity):
         category = get_category(entity)
         db_categs = db
-        for record in db_categs:
-            if category == record['name']:
-                return record['id']
-    else:
-        return None
+        try:
+            for record in db_categs:
+                if category == record['name']:
+                    return record['id']
+        except TypeError:
+            print("Cannot find category because DB is not a dict of records.")
+    return None
 
 def last_pdf():
     list_of_files = glob.glob('./data/*.pdf') # * means all if need specific format then *.csv
