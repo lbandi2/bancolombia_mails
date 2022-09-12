@@ -186,7 +186,8 @@ class MailOperation:
             #     operation['category'] = get_category(self.op_entity())
             # else:
             #     operation['category'] = ''
-            operation['category'] = find_category_in_db(self.op_entity(), db=DB(db_table='categories').all_records())
+            db = DB(db_table='categories').all_records()
+            operation['category'] = find_category_in_db(self.op_entity(), db=db)
             operation['dues'] = 1
             return operation
 
