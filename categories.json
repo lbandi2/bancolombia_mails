@@ -58,7 +58,8 @@
         "home sentry"
     ],
     "alojamiento" : [
-        "hotel"
+        "hotel",
+        "airbnb"
     ],
     "medicina" : [
         "clinica",
