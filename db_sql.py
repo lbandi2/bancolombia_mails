@@ -2,7 +2,7 @@ from mysql.connector import connect, Error
 import os
 from dotenv import load_dotenv
 
-from utils import string_to_datetime, get_category
+from utils import string_to_datetime
 
 load_dotenv()
 
@@ -14,6 +14,7 @@ class DB:
     DB_TABLE_OP_ACCOUNT = os.getenv('DBSQL_TABLE_OP_ACCOUNT')
     DB_TABLE_OP_CARD = os.getenv('DBSQL_TABLE_OP_CARD')
     DB_TABLE_OP_CATEGORIES = os.getenv('DBSQL_TABLE_OP_CATEGORIES')
+    DB_TABLE_KEYWORDS = os.getenv('DBSQL_TABLE_CATEGORIES_KEYWORDS')
     DB_TABLE_CARDS = os.getenv('DBSQL_TABLE_CARDS')
     DB_TABLE_ACCOUNTS = os.getenv('DBSQL_TABLE_ACCOUNTS')
 
@@ -26,6 +27,8 @@ class DB:
             self.db_table = self.DB_TABLE_OP_CARD
         elif db_table == 'categories':
             self.db_table = self.DB_TABLE_OP_CATEGORIES
+        elif db_table == 'keywords':
+            self.db_table = self.DB_TABLE_KEYWORDS
         else:
             self.db_table = self.DB_TABLE_OP_ACCOUNT
         # self.connect()

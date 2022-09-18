@@ -1,8 +1,8 @@
 from bs4 import BeautifulSoup
 import re
-from utils import regexp_in_list, convert_money, operation_types, get_category, find_category_in_db
+from utils import regexp_in_list, convert_money, operation_types
 from db_sql import DB
-from dotenv import dotenv_values
+from category import Categories
 
 
 class MailOperation:
@@ -186,8 +186,10 @@ class MailOperation:
             #     operation['category'] = get_category(self.op_entity())
             # else:
             #     operation['category'] = ''
-            db = DB(db_table='categories').all_records()
-            operation['category'] = find_category_in_db(self.op_entity(), db=db)
+            db_categ = DB(db_table='categories').all_records()
+            # db_categ = Categories().get_all()
+            operation['category'] = Categories().get_category(self.op_entity())
+            # operation['category'] = find_category_in_db(self.op_entity(), db=db_categ)
             operation['dues'] = 1
             return operation
 
