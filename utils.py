@@ -7,6 +7,7 @@ import glob
 import os
 import csv
 
+# from category import Categories
 
 def dir_exist(path):
     return os.path.isdir(path)
@@ -118,27 +119,6 @@ def find_operation(string):
         for value in op_v:
             if value.lower() in string.lower():
                 return op_k
-
-def get_category(string):
-    with open("categories.json", "r") as json_file:
-        content = json.load(json_file)    
-    for key, values in content.items():
-        for value in values:
-            if value in string.lower():
-                return key
-    return None
-
-def find_category_in_db(entity, db):
-    if get_category(entity):
-        category = get_category(entity)
-        db_categs = db
-        try:
-            for record in db_categs:
-                if category == record['name']:
-                    return record['id']
-        except TypeError:
-            print("Cannot find category because DB is not a dict of records.")
-    return None
 
 def last_pdf():
     list_of_files = glob.glob('./data/*.pdf') # * means all if need specific format then *.csv
