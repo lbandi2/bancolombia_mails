@@ -145,6 +145,9 @@ class MailOperation:
                         if 'desde cta' in text_w_money:
                             text_w_timedate = text_w_money.split(self.op_amount())[1]         # pagos (a veces son debitos automaticos)
                             entity = text_w_timedate.replace(" a ", "").split(" desde cta")[0]
+                        elif 'desde producto' in text_w_money:
+                            text_w_timedate = text_w_money.split(self.op_amount())[1]         # pagos (a veces son debitos automaticos)
+                            entity = text_w_timedate.replace(" a ", "").split(" desde producto")[0]
                         else:
                             text_w_timedate = text_w_money.split(f"{self.op_amount()} en")[1]         # compras habituales
                             time = re.search("\d{2}\:\d{2}", text_w_timedate).group()
