@@ -104,6 +104,9 @@ class MailOperation:
                     if 'deuda en pesos' in item.text.lower() and ', abono que' in item.text.lower():
                         text_wo_money = item.text.lower().split('deuda en pesos.')[1].split(', abono que')[0]
                         return text_wo_money.strip().upper()
+                    elif 'deuda en dólares' in item.text.lower() and ', abono que' in item.text.lower():
+                        text_wo_money = item.text.lower().split('deuda en dólares.')[1].split(', abono que')[0]
+                        return text_wo_money.strip().upper()
         return None
 
     def op_entity_manual_payment(self):
