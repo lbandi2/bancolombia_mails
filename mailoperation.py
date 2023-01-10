@@ -116,6 +116,9 @@ class MailOperation:
                     if 'realizo abono a su' in item.text.lower():
                         text_wo_money = item.text.lower().split('realizo abono a su ')[1].split(f' por $')[0]
                         return text_wo_money.strip().upper()
+                    elif 'desde cta' in item.text.lower():
+                        text_wo_money = item.text.lower().split('desde cta ')[1].split(f' por $')[0]
+                        return text_wo_money.strip().upper()
         return None
 
     def op_entity(self):

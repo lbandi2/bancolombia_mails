@@ -10,7 +10,8 @@
         "informa Transferencia por"
     ],
     "manual payment": [
-        "informa que"
+        "informa que",
+        "Pago de Tarjeta de Credito por"
     ],
     "recurring bill": [
         "informa pago Factura Programada"
