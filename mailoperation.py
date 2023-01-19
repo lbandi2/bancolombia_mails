@@ -117,8 +117,8 @@ class MailOperation:
                         text_wo_money = item.text.lower().split('realizo abono a su ')[1].split(f' por $')[0]
                         return text_wo_money.strip().upper()
                     elif 'desde cta' in item.text.lower():
-                        text_wo_money = item.text.lower().split('desde cta ')[1].split(f' por $')[0]
-                        return text_wo_money.strip().upper()
+                        text_wo_money = item.text.lower().split('desde cta ')[1].split(f' a la tarjeta')[1].split('. ')[0]
+                        return f"T.CRED{text_wo_money.strip()}"
         return None
 
     def op_entity(self):
