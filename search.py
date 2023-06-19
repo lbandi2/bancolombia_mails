@@ -12,7 +12,7 @@ class Search:
         self.service = gmail_authenticate()
         self.emails = []
         self.message_ids = self.search_messages(query)
-        self.parse_emails()
+        # self.parse_emails()
 
     def parse_emails(self):
         for index, msg in enumerate(self.message_ids):
