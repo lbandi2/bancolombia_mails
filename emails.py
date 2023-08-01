@@ -24,6 +24,9 @@ class Email:
         self.attachment = {}
         self.read_payload()
 
+    def __repr__(self) -> str:
+        return f"{self.date} - {self.subject.capitalize()}"
+
     def download_attachment(self, folder_name='./data/'):
         print("Saving the file:", self.attachment['filename'], "size:", self.attachment['file_size'])
         attachment = self.service.users().messages() \

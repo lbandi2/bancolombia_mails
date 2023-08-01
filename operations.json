@@ -7,7 +7,8 @@
         "informa Retiro por"
     ],
     "transfer": [
-        "informa Transferencia por"
+        "informa Transferencia por",
+        "transferencia con QR por"
     ],
     "manual payment": [
         "informa que",
