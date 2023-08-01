@@ -86,6 +86,8 @@ class MailOperation:
             for account in accounts.all_accounts():
                 if f"*{account['number']}" in element.text:
                     return account
+                elif account['number'] in element.text:
+                    return account
             for card in cards.all_cards():
                 if f"*{card['number']}" in element.text:
                     if card['type'] == 'debit':

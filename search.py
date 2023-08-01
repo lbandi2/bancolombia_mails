@@ -90,7 +90,7 @@ class SearchOperations(Search):
     def __init__(self, query):
         super().__init__(query, stop_if_unread=True)
         self.operations = self.get_operations()
-        # self.push_to_db()
+        self.push_to_db()
 
     def push_to_db(self):
         if self.operations != []:
